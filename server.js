@@ -7,9 +7,9 @@ const app = express()
 
 app.use(cors())
 
-app.get('/jwt', grabToken())
+app.get('/jwt', grabToken)
 
-app.use(jwt({ secret: secret }))
+// app.use(jwt({ secret: secret }))
 
 const foods = [
 	{ id: 1, item: 'ginger tofu' },
@@ -21,3 +21,4 @@ app.get('/foods', (req, res) => {
 	res.json(foods)
 })
 
+module.exports = app;
