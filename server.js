@@ -11,7 +11,7 @@ app.get('/jwt', (req, res) => {
 	res.json({ token: jsonwebtoken.sign({ user: 'john'}, secret )})
 })
 
-app.use(jwt({ secret: secret }))
+// app.use(jwt({ secret: secret }))
 
 const foods = [
 	{ id: 1, item: 'ginger tofu' },
