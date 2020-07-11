@@ -7,11 +7,9 @@ const app = express()
 
 app.use(cors())
 
-app.get('/jwt', (req, res) => {
-	res.json({ token: jsonwebtoken.sign({ user: 'john'}, secret )})
-})
+app.get('/jwt', (req, res) => grabToken(req, res) )
 
-// app.use(jwt({ secret: secret }))
+app.use(jwt({ secret: secret, algorithms: ['HS256'] }))
 
 const foods = [
 	{ id: 1, item: 'ginger tofu' },

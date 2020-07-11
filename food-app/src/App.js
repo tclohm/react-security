@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import './App.css';
+
+// MARK: -- Third Party
+import axios from 'axios';
+import { Container, Row, Col, Button, Alert, Table } from 'reactstrap';
 
 const apiUrl = 'http://localhost:8000'
 
@@ -42,29 +45,40 @@ function App() {
     }
   }
   return (
-   <>
+   <Container>
      <section style={{ marginBottom: '10px' }}>
-        <button onClick={() => getJwt()}>Get JWT</button>
-        {jwt && (
-          <pre>
-            <code>{jwt}</code>
-          </pre>
-        )}
+       <Row className="mt-5">
+          <Col xs={{ size: 12 }}>
+            <Button color='primary' onClick={() => getJwt()}>Get JWT</Button>
+          </Col>
+       </Row>
+       <Row className="mt-4">
+          <Col xs={{ size: 12 }}>
+            {jwt && (
+                <Alert color="dark"><code style={{ color: 'black' }}>{jwt}</code></Alert>
+            )}
+          </Col>
+        </Row>
       </section>
       <section>
-        <button onClick={() => getFoods()}>
+        <Button color='primary' onClick={() => getFoods()}>
           Get Foods
-        </button>
-        <ul>
+        </Button>
+        <Table className="mt-4">
           {foods.map((food, i) => (
-            <li>{food.description}</li>
+            <tbody>
+            <tr>
+              <th>{food.id}</th>
+              <td>{food.item}</td>
+            </tr>
+            </tbody>
           ))}
-        </ul>
+        </Table>
         {fetchError && (
-          <p style={{ color: 'red' }}>{fetchError}</p>
+          <Alert color="warning">{fetchError}</Alert>
         )}
       </section>
-   </>
+   </Container>
   );
 }
 
