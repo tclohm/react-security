@@ -5,23 +5,23 @@ import './App.css';
 import axios from 'axios';
 import { Container, Row, Col, Button, Alert, Table } from 'reactstrap';
 
-const apiUrl = 'http://localhost:8000'
+// const apiUrl = 'http://localhost:8000'
 
-axios.interceptors.request.use(
-  config => {
-    const { origin } = new URL(config.url)
-    const allowedOrigins = [apiUrl]
-    const token = localStorage.getItem('token')
+// axios.interceptors.request.use(
+//   config => {
+//     const { origin } = new URL(config.url)
+//     const allowedOrigins = [apiUrl]
+//     const token = localStorage.getItem('token')
 
-    if (allowedOrigins.includes(origin)) {
-      config.headers.authorization = `Bearer ${token}`
-    }
-    return config
-  },
-  error => {
-    return Promise.reject(error)
-  }
-)
+//     if (allowedOrigins.includes(origin)) {
+//       config.headers.authorization = `Bearer ${token}`
+//     }
+//     return config
+//   },
+//   error => {
+//     return Promise.reject(error)
+//   }
+// )
 
 function App() {
   const storedJwt = localStorage.getItem('token')
@@ -30,14 +30,13 @@ function App() {
   const [fetchError, setFetchError] = useState(null)
 
   const getJwt = async () => {
-    const { data } = await axios.get(`${apiUrl}/jwt`)
-    localStorage.setItem('token', data.token)
+    const { data } = await axios.get(`/jwt`)
     setJwt(data.token)
   }
 
   const getFoods = async () => {
     try {
-      const { data } = await axios.get(`${apiUrl}/foods`)
+      const { data } = await axios.get(`/foods`)
       setFoods(data)
       setFetchError(null)
     } catch (err) {
