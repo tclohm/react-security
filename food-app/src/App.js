@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import './App.css';
 
-const apiUrl = 'http://localhost:5000'
+const apiUrl = 'http://localhost:8000'
 
 axios.interceptors.request.use(
   config => {
