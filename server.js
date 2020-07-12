@@ -5,7 +5,14 @@ const cookieParser = require('cookie-parser')
 const { grabToken, secret } = require('./middleware/restricted')
 const app = express()
 
+const csrfProtection = csrf({ cookie: true })
+
 app.use(cors())
+app.use(csrfProtection)
+
+app.get('/csrf-token', (req, res) => {
+	res.json({ csrfToken: req.csrfToken() })
+})
 
 app.get('/jwt', (req, res) => {
 	const token = grabToken(req, res)
