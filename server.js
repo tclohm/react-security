@@ -1,6 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const jwt = require('express-jwt')
+const cookieParser = require('cookie-parser')
 const { grabToken, secret } = require('./middleware/restricted')
 const app = express()
 
@@ -16,7 +17,15 @@ app.get('/jwt', (req, res) => {
 	res.json({ token })
 })
 
-app.use(jwt({ secret: secret, algorithms: ['HS256'] }))
+app.use(cookieParser())
+
+app.use(
+	jwt({ 
+		secret: secret, 
+		getToken: req => req.cookies.token, 
+		algorithms: ['HS256'] 
+	})
+)
 
 const foods = [
 	{ id: 1, item: 'ginger tofu' },
