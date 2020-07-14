@@ -3,16 +3,13 @@ const cors = require('cors')
 const jwt = require('express-jwt')
 const cookieParser = require('cookie-parser')
 const { grabToken, secret } = require('./middleware/restricted')
+const csrf = require('csurf')
+
 const app = express()
 
 const csrfProtection = csrf({ cookie: true })
 
 app.use(cors())
-app.use(csrfProtection)
-
-app.get('/csrf-token', (req, res) => {
-	res.json({ csrfToken: req.csrfToken() })
-})
 
 app.get('/jwt', (req, res) => {
 	const token = grabToken(req, res)
@@ -25,6 +22,11 @@ app.get('/jwt', (req, res) => {
 })
 
 app.use(cookieParser())
+app.use(csrfProtection)
+
+app.get('/csrf-token', (req, res) => {
+	res.json({ csrfToken: req.csrfToken() })
+})
 
 app.use(
 	jwt({ 
@@ -41,5 +43,10 @@ const foods = [
 ]
 
 app.get('/foods', (req, res) => res.json(foods))
+
+app.post('/foods', (req, res) => {
+	foods.push({ id: foods.length + 1, item: 'new food' })
+	res.json({ message: 'Food created!' })
+})
 
 module.exports = app;
