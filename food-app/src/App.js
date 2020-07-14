@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
 // MARK: -- Third Party
@@ -25,6 +25,7 @@ import { Container, Row, Col, Button, Alert, Table } from 'reactstrap';
 
 function App() {
   const storedJwt = localStorage.getItem('token')
+  const [newFoodMessage, setNewFoodMessage] = useState(null)
   const [jwt, setJwt] = useState(storedJwt || null)
   const [foods, setFoods] = useState([])
   const [fetchError, setFetchError] = useState(null)
@@ -43,6 +44,26 @@ function App() {
       setFetchError(err.message)
     }
   }
+
+  const createFood = async () => {
+    try {
+      const { data } = await axios.post('/foods');
+      setNewFoodMessage(data.message)
+      setFetchError(null)
+    } catch (err) {
+      setFetchError(err.message)
+    }
+  }
+
+  useEffect(() => {
+    const getCSRFToken = async () => {
+      const { data } = await axios.get('/csrf-token')
+      axios.defaults.headers.post['X-CSRF-Token'] = data.csrfToken;
+    }
+
+    getCSRFToken()
+  }, [])
+
   return (
    <Container>
      <section style={{ marginBottom: '10px' }}>
@@ -76,6 +97,12 @@ function App() {
         {fetchError && (
           <Alert color="warning">{fetchError}</Alert>
         )}
+      </section>
+      <section>
+        <Button color="primary" onClick={() => createFood()}>
+          Create New Food
+        </Button>
+        {newFoodMessage && <Alert color="success">{newFoodMessage}</Alert>}
       </section>
    </Container>
   );
